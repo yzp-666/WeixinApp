@@ -18,9 +18,11 @@ class Banner
     **/
     public function getBanner($id)
     {
+        //AOP面向切面编程
         (new IDMustBePostiveInt())->goCheck();
-        $banner = BannerModel::get($id);
-//        $banner = BannerModel::getBannerByID($id);
+
+        $banner = BannerModel::getBannerByID($id);
+
         if(!$banner){
             throw new BannerMissException();
         }
