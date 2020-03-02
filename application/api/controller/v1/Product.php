@@ -30,6 +30,7 @@ class Product
         return $products;
     }
 
+    //查询
     public function getOne($id){
         (new IDMustBePostiveInt())->goCheck();
         $products = ProductModel::getProductDetail($id);
@@ -37,5 +38,10 @@ class Product
             throw new ProductException();
         }
         return $products;
+    }
+
+    // 删除
+    public function deleteOne($id){
+
     }
 }

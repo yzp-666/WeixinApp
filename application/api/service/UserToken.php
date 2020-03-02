@@ -4,6 +4,7 @@
 namespace app\api\service;
 
 
+use app\lib\enum\ScopeEnum;
 use app\lib\exception\TokenException;
 use app\lib\exception\WeChatException;
 use think\Exception;
@@ -54,7 +55,7 @@ class UserToken extends Token
         } else{
             $uid = $this->newUser($openid);
         }
-        $cachedValue = $this->prepareCachendValue($weResult, $uid);
+        $cachedValue = $this->prepareCachedValue($weResult, $uid);
         $token = $this->saveToCache($cachedValue);
         return $token;
     }
@@ -64,7 +65,7 @@ class UserToken extends Token
         $value = json_encode($cachedValue);
         $expire_in = config('setting.token_expire_in');
 
-        $request = cache($key, $value, $expire_in);
+        $request = cache($key, $value, $expire_in); // 缓存
         if(!$request){
             throw new TokenException([
                 'msg' => '服务器缓存异常',
@@ -75,10 +76,13 @@ class UserToken extends Token
     }
 
 
-    private function prepareCachendValue($wxResult, $uid){
+    private function prepareCachedValue($wxResult, $uid){
         $cachedValue = $wxResult;
         $cachedValue['uid'] = $uid;
-        $cachedValue['scope'] = 16;
+        // scope 16 代表App用户的权限数值
+        $cachedValue['scope'] = ScopeEnum::User;
+        // scope 32 代表cms管理员的权限数值
+//        $cachedValue['scope'] = 32;
         return $cachedValue;
     }
 
