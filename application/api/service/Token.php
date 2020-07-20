@@ -43,6 +43,7 @@ class Token
 
     }
 
+    //  获取当前请求用户的UID
     public static function getCurrentUid(){
         $uid = self::getCurrentTokenVar('uid');
         return $uid;
@@ -74,5 +75,17 @@ class Token
         } else {
             throw new TokenException();
         }
+    }
+
+    public static function isValidOperate($checkenUID)
+    {
+        if (!$checkenUID){
+            throw new Exception('检查UID时必须传入一个被检查的UID');
+        }
+        $currentOperateUID = self::getCurrentUid();
+        if ($currentOperateUID == $checkenUID){
+            return true;
+        }
+        return false;
     }
 }
